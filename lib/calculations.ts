@@ -40,12 +40,21 @@ export function calculateResults(userData: UserData): CalculationResult {
     bac = userData.bacInput;
   } else {
     // Calculate BAC from drinks
+    if (!userData.weight || !userData.drinkingDuration) {
+      throw new Error(
+        "Weight and drinking duration are required for BAC calculation"
+      );
+    }
     bac = calculateBAC(
       userData.drinks,
       userData.weight,
       userData.gender,
       userData.drinkingDuration
     );
+  }
+
+  if (!userData.masl) {
+    throw new Error("Height above sea level (masl) is required");
   }
 
   const promillemeter = calculatePromillemeter(bac, userData.masl);
