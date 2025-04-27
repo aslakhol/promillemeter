@@ -41,7 +41,7 @@ export function PromillemeterForm() {
     const savedData = loadUserData();
     if (savedData) {
       setUserData(savedData);
-      setActiveTab(savedData.bacInput !== null ? "direct" : "calculate");
+      // Don't automatically switch tabs based on saved data
     }
   }, []);
 
@@ -89,6 +89,7 @@ export function PromillemeterForm() {
 
   const handleExampleSelect = (exampleData: Partial<UserData>) => {
     setUserData((prev) => ({ ...prev, ...exampleData }));
+    // Only switch tabs if the example data explicitly contains bacInput
     if (exampleData.bacInput !== undefined) {
       setActiveTab(exampleData.bacInput !== null ? "direct" : "calculate");
     }
