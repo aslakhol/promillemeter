@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import type { ExampleData, UserData } from "@/lib/types"
+import { Button } from "@/components/ui/button";
+import type { ExampleData, UserData } from "@/lib/types";
 
 const exampleData: ExampleData[] = [
   {
-    name: "Cognac Party on Mir",
-    description: "Enjoying cognac on the Mir space station",
+    name: "Cognac Party på Mir",
+    description: "Vi har bilder!",
     data: {
       bacInput: 1,
       masl: 350000,
@@ -17,8 +17,8 @@ const exampleData: ExampleData[] = [
     },
   },
   {
-    name: "Communion on Moon",
-    description: "A small sip on the lunar surface",
+    name: "Nattverd på månen",
+    description: "Bare en liten slurk",
     data: {
       bacInput: null,
       masl: 384400000,
@@ -35,8 +35,8 @@ const exampleData: ExampleData[] = [
     },
   },
   {
-    name: "Drunkest Man Alive",
-    description: "Record-breaking BAC at sea level",
+    name: "Verdens fulleste mann",
+    description: "Testet 5 ganger til 14.8‰",
     data: {
       bacInput: 14.8,
       masl: 105,
@@ -46,10 +46,10 @@ const exampleData: ExampleData[] = [
       drinkingDuration: 0,
     },
   },
-]
+];
 
 interface ExampleDataProps {
-  onSelectExample: (data: Partial<UserData>) => void
+  onSelectExample: (data: Partial<UserData>) => void;
 }
 
 export function ExampleDataButtons({ onSelectExample }: ExampleDataProps) {
@@ -63,9 +63,11 @@ export function ExampleDataButtons({ onSelectExample }: ExampleDataProps) {
           onClick={() => onSelectExample(example.data)}
         >
           <span className="font-bold">{example.name}</span>
-          <span className="text-sm text-muted-foreground mt-1">{example.description}</span>
+          <span className="text-sm text-muted-foreground mt-1">
+            {example.description}
+          </span>
         </Button>
       ))}
     </div>
-  )
+  );
 }

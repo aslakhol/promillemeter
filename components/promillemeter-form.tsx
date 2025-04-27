@@ -216,17 +216,7 @@ export function PromillemeterForm() {
       )}
 
       {/* Example scenarios moved to the bottom */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Eksempel-scenarier</CardTitle>
-          <CardDescription>
-            Prøv disse forhåndskonfigurerte eksemplene
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ExampleDataButtons onSelectExample={handleExampleSelect} />
-        </CardContent>
-      </Card>
+      <ExampleDataButtons onSelectExample={handleExampleSelect} />
     </div>
   );
 }
