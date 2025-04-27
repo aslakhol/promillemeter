@@ -220,10 +220,13 @@ export function PromillemeterForm() {
                   step="0.5"
                   value={userData.drinkingDuration ?? ""}
                   onChange={(e) => {
-                    const value = Number.parseFloat(e.target.value);
+                    const value =
+                      e.target.value === ""
+                        ? undefined
+                        : Number.parseFloat(e.target.value);
                     handleInputChange(
                       "drinkingDuration",
-                      value < 0 ? 0 : value || 0
+                      value !== undefined && value < 0 ? 0 : value
                     );
                   }}
                   placeholder="Hvor lenge har du drukket?"
@@ -243,7 +246,9 @@ export function PromillemeterForm() {
                   onChange={(e) =>
                     handleInputChange(
                       "bacInput",
-                      Number.parseFloat(e.target.value) || 0
+                      e.target.value === ""
+                        ? null
+                        : Number.parseFloat(e.target.value)
                     )
                   }
                   placeholder="Skriv inn promillen din"
@@ -274,7 +279,9 @@ export function PromillemeterForm() {
               onChange={(e) =>
                 handleInputChange(
                   "masl",
-                  Number.parseFloat(e.target.value) || 0
+                  e.target.value === ""
+                    ? undefined
+                    : Number.parseFloat(e.target.value)
                 )
               }
               placeholder={`Skriv inn høyde i ${
