@@ -12,14 +12,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { BacInput } from "./bac-input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { DrinkInput } from "./drink-input";
 import { ResultDisplay } from "./result-display";
 import { ExampleDataButtons } from "./example-data";
 import type { UserData, Gender, CalculationResult } from "@/lib/types";
 import { calculateResults } from "@/lib/calculations";
 import { saveUserData, loadUserData } from "@/lib/storage";
-import { toast } from "@/components/ui/use-toast";
-
+import { toast } from "@/hooks/use-toast";
 const initialUserData: UserData = {
   weight: 70,
   gender: "male",
@@ -33,6 +33,7 @@ export function PromillemeterForm() {
   const [userData, setUserData] = useState<UserData>(initialUserData);
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [showKm, setShowKm] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>("calculate");
   const resultRef = useRef<HTMLDivElement>(null);
 
   // Load saved data on component mount
@@ -40,13 +41,13 @@ export function PromillemeterForm() {
     const savedData = loadUserData();
     if (savedData) {
       setUserData(savedData);
+      setActiveTab(savedData.bacInput !== null ? "direct" : "calculate");
     }
   }, []);
 
   // Scroll to results when they appear
   useEffect(() => {
     if (result && resultRef.current) {
-      // Add a small delay to ensure the DOM has updated
       setTimeout(() => {
         resultRef.current?.scrollIntoView({ behavior: "smooth" });
       }, 100);
@@ -55,7 +56,7 @@ export function PromillemeterForm() {
 
   const handleCalculate = () => {
     // Validate input
-    if (userData.weight <= 0) {
+    if (activeTab === "calculate" && userData.weight <= 0) {
       toast({
         title: "Ugyldig vekt",
         description: "Vennligst skriv inn en gyldig vekt.",
@@ -63,8 +64,6 @@ export function PromillemeterForm() {
       });
       return;
     }
-
-    // No validation needed for MASL as it can be negative for places below sea level
 
     if (userData.bacInput === null && userData.drinks.length === 0) {
       toast({
@@ -76,11 +75,8 @@ export function PromillemeterForm() {
       return;
     }
 
-    // Calculate results
     const calculationResult = calculateResults(userData);
     setResult(calculationResult);
-
-    // Save to local storage
     saveUserData(userData);
   };
 
@@ -93,17 +89,28 @@ export function PromillemeterForm() {
 
   const handleExampleSelect = (exampleData: Partial<UserData>) => {
     setUserData((prev) => ({ ...prev, ...exampleData }));
+    if (exampleData.bacInput !== undefined) {
+      setActiveTab(exampleData.bacInput !== null ? "direct" : "calculate");
+    }
   };
 
   const toggleMaslUnit = () => {
     if (showKm) {
-      // Convert back to meters
       handleInputChange("masl", userData.masl * 1000);
     } else {
-      // Convert to kilometers
       handleInputChange("masl", userData.masl / 1000);
     }
     setShowKm(!showKm);
+  };
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    if (value === "direct") {
+      handleInputChange("bacInput", 0);
+      handleInputChange("drinks", []);
+    } else {
+      handleInputChange("bacInput", null);
+    }
   };
 
   return (
@@ -114,89 +121,137 @@ export function PromillemeterForm() {
           <CardDescription>Finn din promillemeter</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Personal Information */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">Personlig informasjon</h3>
+          <Tabs
+            value={activeTab}
+            onValueChange={handleTabChange}
+            className="w-full"
+          >
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="calculate">Drikke</TabsTrigger>
+              <TabsTrigger value="direct">‰</TabsTrigger>
+            </TabsList>
 
-            <div className="grid gap-2">
-              <Label htmlFor="weight">Vekt (kg)</Label>
-              <Input
-                id="weight"
-                type="number"
-                min="1"
-                value={userData.weight || ""}
-                onChange={(e) =>
-                  handleInputChange(
-                    "weight",
-                    Number.parseFloat(e.target.value) || 0
-                  )
-                }
-                placeholder="Skriv inn din vekt i kilogram"
-              />
-            </div>
+            <TabsContent value="calculate" className="space-y-6 pt-4">
+              {/* Personal Information for Drinks tab */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium">Personlig informasjon</h3>
 
-            <div className="grid gap-2">
-              <Label>Kjønn</Label>
-              <RadioGroup
-                value={userData.gender}
-                onValueChange={(value: Gender) =>
-                  handleInputChange("gender", value)
-                }
-                className="flex space-x-4"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="male" id="male" />
-                  <Label htmlFor="male">Mann</Label>
+                <div className="grid gap-2">
+                  <Label htmlFor="weight">Vekt (kg)</Label>
+                  <Input
+                    id="weight"
+                    type="number"
+                    min="1"
+                    value={userData.weight || ""}
+                    onChange={(e) =>
+                      handleInputChange(
+                        "weight",
+                        Number.parseFloat(e.target.value) || 0
+                      )
+                    }
+                    placeholder="Skriv inn din vekt i kilogram"
+                  />
                 </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="female" id="female" />
-                  <Label htmlFor="female">Kvinne</Label>
-                </div>
-              </RadioGroup>
-            </div>
 
-            <div className="grid gap-2">
-              <div className="flex justify-between">
-                <Label htmlFor="masl">
-                  {showKm ? "Kilometer over havet" : "Meter over havet"}
-                </Label>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={toggleMaslUnit}
-                >
-                  Bytt til {showKm ? "Meter" : "Kilometer"}
-                </Button>
+                <div className="grid gap-2">
+                  <Label>Kjønn</Label>
+                  <RadioGroup
+                    value={userData.gender}
+                    onValueChange={(value: Gender) =>
+                      handleInputChange("gender", value)
+                    }
+                    className="flex space-x-4"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="male" id="male" />
+                      <Label htmlFor="male">Mann</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="female" id="female" />
+                      <Label htmlFor="female">Kvinne</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
               </div>
-              <Input
-                id="masl"
-                type="number"
-                value={userData.masl || ""}
-                onChange={(e) =>
-                  handleInputChange(
-                    "masl",
-                    Number.parseFloat(e.target.value) || 0
-                  )
-                }
-                placeholder={`Skriv inn høyde i ${
-                  showKm ? "kilometer" : "meter"
-                }`}
-              />
-            </div>
-          </div>
 
-          {/* BAC Input */}
-          <BacInput
-            bacInput={userData.bacInput}
-            drinks={userData.drinks}
-            drinkingDuration={userData.drinkingDuration}
-            onBacChange={(value) => handleInputChange("bacInput", value)}
-            onDrinksChange={(value) => handleInputChange("drinks", value)}
-            onDurationChange={(value) =>
-              handleInputChange("drinkingDuration", value)
-            }
-          />
+              <DrinkInput
+                drinks={userData.drinks}
+                onChange={(drinks) => handleInputChange("drinks", drinks)}
+              />
+
+              <div className="grid gap-2">
+                <Label htmlFor="drinking-duration">
+                  Drikkevarighet (timer)
+                </Label>
+                <Input
+                  id="drinking-duration"
+                  type="number"
+                  min="0"
+                  step="0.5"
+                  value={userData.drinkingDuration || ""}
+                  onChange={(e) => {
+                    const value = Number.parseFloat(e.target.value);
+                    handleInputChange(
+                      "drinkingDuration",
+                      value < 0 ? 0 : value || 0
+                    );
+                  }}
+                  placeholder="Hvor lenge har du drukket?"
+                />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="direct" className="space-y-6 pt-4">
+              <div className="grid gap-2">
+                <Label htmlFor="bac-direct">Promille (‰)</Label>
+                <Input
+                  id="bac-direct"
+                  type="number"
+                  min="0"
+                  step="0.1"
+                  value={userData.bacInput || ""}
+                  onChange={(e) =>
+                    handleInputChange(
+                      "bacInput",
+                      Number.parseFloat(e.target.value) || 0
+                    )
+                  }
+                  placeholder="Skriv inn promillen din"
+                />
+              </div>
+            </TabsContent>
+          </Tabs>
+
+          {/* MASL Input - Common for both tabs */}
+          <div className="grid gap-2">
+            <div className="flex justify-between">
+              <Label htmlFor="masl">
+                {showKm ? "Kilometer over havet" : "Meter over havet"}
+              </Label>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={toggleMaslUnit}
+              >
+                Bytt til {showKm ? "Meter" : "Kilometer"}
+              </Button>
+            </div>
+            <Input
+              id="masl"
+              type="number"
+              value={userData.masl || ""}
+              onChange={(e) =>
+                handleInputChange(
+                  "masl",
+                  Number.parseFloat(e.target.value) || 0
+                )
+              }
+              placeholder={`Skriv inn høyde i ${
+                showKm ? "kilometer" : "meter"
+              }`}
+            />
+          </div>
 
           <Button
             type="button"
@@ -215,7 +270,6 @@ export function PromillemeterForm() {
         </div>
       )}
 
-      {/* Example scenarios moved to the bottom */}
       <ExampleDataButtons onSelectExample={handleExampleSelect} />
     </div>
   );
