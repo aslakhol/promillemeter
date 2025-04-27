@@ -70,13 +70,12 @@ export function ResultDisplay({ result, showKm = false }: ResultDisplayProps) {
     <Card className="w-full">
       <CardHeader>
         <CardTitle className="flex justify-between items-center">
-          <span>Ditt resultat</span>
+          <span>Din promillemeter</span>
           <Button variant="outline" size="icon" onClick={shareResults}>
             <Share2 className="h-4 w-4" />
             <span className="sr-only">Del resultat</span>
           </Button>
         </CardTitle>
-        <CardDescription>Basert på dine inndata</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col items-center justify-center p-6 bg-primary/10 rounded-lg">
