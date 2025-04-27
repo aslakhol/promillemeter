@@ -69,7 +69,7 @@ export function ResultDisplay({ result, showKm = false }: ResultDisplayProps) {
         <CardTitle className="flex justify-between items-center">
           <span>Din promillemeter</span>
           <div className="flex gap-2">
-            {typeof navigator !== "undefined" && navigator.share && (
+            {typeof navigator !== "undefined" && "share" in navigator && (
               <Button variant="outline" size="icon" onClick={shareResults}>
                 <Share2 className="h-4 w-4" />
                 <span className="sr-only">Del resultat</span>
