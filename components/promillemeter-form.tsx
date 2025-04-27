@@ -174,7 +174,7 @@ export function PromillemeterForm() {
             <TabsContent value="calculate" className="space-y-6 pt-4">
               {/* Personal Information for Drinks tab */}
               <div className="space-y-4">
-                <h3 className="text-lg font-medium">Personlig informasjon</h3>
+                <h3 className="text-lg font-medium">Kropp</h3>
 
                 <div className="grid gap-2">
                   <Label htmlFor="weight">Vekt (kg)</Label>

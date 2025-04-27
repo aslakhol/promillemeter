@@ -39,7 +39,7 @@ export function DrinkInput({ drinks, onChange }: DrinkInputProps) {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-medium">Drinker</h3>
+        <h3 className="text-lg font-medium">Drikke</h3>
         <Button
           type="button"
           variant="outline"
@@ -48,14 +48,13 @@ export function DrinkInput({ drinks, onChange }: DrinkInputProps) {
           className="flex items-center gap-1"
         >
           <PlusCircle className="h-4 w-4" />
-          Legg til drink
+          Legg til drikke
         </Button>
       </div>
 
       {drinks.length === 0 && (
         <p className="text-sm text-muted-foreground">
-          Ingen drinker lagt til ennå. Klikk på knappen over for å legge til en
-          drink.
+          Ingen drikke lagt til enda.
         </p>
       )}
 
@@ -109,7 +108,7 @@ export function DrinkInput({ drinks, onChange }: DrinkInputProps) {
               className="h-10 w-10"
             >
               <Trash2 className="h-4 w-4" />
-              <span className="sr-only">Fjern drink</span>
+              <span className="sr-only">Fjern drikke</span>
             </Button>
           </div>
         </div>
