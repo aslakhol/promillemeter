@@ -13,7 +13,9 @@ export function calculateBAC(
   const totalAlcohol = drinks.reduce((sum, drink) => {
     // Convert ml * percentage to grams of pure alcohol
     // Density of alcohol is approximately 0.789 g/ml
-    return sum + drink.size * (drink.alcoholPercentage / 100) * 0.789;
+    // return sum + drink.size * (drink.alcoholPercentage / 100) * 0.789;
+    // I cut the density reduction to make the numbers more like what we caluclated at the party.
+    return sum + drink.size * (drink.alcoholPercentage / 100);
   }, 0);
 
   // Calculate BAC
@@ -47,6 +49,17 @@ export function calculateResults(userData: UserData): CalculationResult {
   }
 
   const promillemeter = calculatePromillemeter(bac, userData.masl);
+
+  if (userData.bacInput !== null) {
+    console.log("Using direct BAC input:", { bac });
+  } else {
+    console.log("Calculated from drinks:", {
+      bac,
+      drinks: userData.drinks,
+      weight: userData.weight,
+      drinkingDuration: userData.drinkingDuration,
+    });
+  }
 
   return {
     bac,
