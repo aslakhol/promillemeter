@@ -70,7 +70,26 @@ export function PromillemeterForm() {
       return;
     }
 
-    const calculationResult = calculateResults(userData);
+    const relevantData =
+      activeTab === "direct"
+        ? {
+            bacInput: userData.bacInput,
+            masl: userData.masl,
+            drinks: [],
+            weight: undefined,
+            drinkingDuration: undefined,
+            gender: userData.gender,
+          }
+        : {
+            bacInput: null,
+            masl: userData.masl,
+            drinks: userData.drinks,
+            weight: userData.weight,
+            drinkingDuration: userData.drinkingDuration,
+            gender: userData.gender,
+          };
+
+    const calculationResult = calculateResults(relevantData);
     setResult(calculationResult);
     saveUserData(userData);
   }, [activeTab, userData]);

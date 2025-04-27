@@ -34,7 +34,6 @@ export function calculatePromillemeter(bac: number, masl: number): number {
 
 export function calculateResults(userData: UserData): CalculationResult {
   let bac: number;
-  console.log(userData.weight, userData.drinkingDuration);
 
   if (userData.bacInput !== null) {
     // Use direct BAC input
@@ -43,10 +42,11 @@ export function calculateResults(userData: UserData): CalculationResult {
     // Calculate BAC from drinks
     if (
       userData.weight === undefined ||
-      userData.drinkingDuration === undefined
+      userData.drinkingDuration === undefined ||
+      userData.drinks.length === 0
     ) {
       throw new Error(
-        "Weight and drinking duration are required for BAC calculation"
+        "Weight, drinking duration, and at least one drink are required for BAC calculation"
       );
     }
     bac = calculateBAC(
@@ -62,17 +62,6 @@ export function calculateResults(userData: UserData): CalculationResult {
   }
 
   const promillemeter = calculatePromillemeter(bac, userData.masl);
-
-  if (userData.bacInput !== null) {
-    console.log("Using direct BAC input:", { bac });
-  } else {
-    console.log("Calculated from drinks:", {
-      bac,
-      drinks: userData.drinks,
-      weight: userData.weight,
-      drinkingDuration: userData.drinkingDuration,
-    });
-  }
 
   return {
     bac,
