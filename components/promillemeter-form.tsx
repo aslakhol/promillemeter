@@ -218,7 +218,7 @@ export function PromillemeterForm() {
                   type="number"
                   min="0"
                   step="0.5"
-                  value={userData.drinkingDuration || ""}
+                  value={userData.drinkingDuration ?? ""}
                   onChange={(e) => {
                     const value = Number.parseFloat(e.target.value);
                     handleInputChange(
@@ -237,7 +237,7 @@ export function PromillemeterForm() {
                 <Input
                   id="bac-direct"
                   type="number"
-                  min="0"
+                  min="0.1"
                   step="0.1"
                   value={userData.bacInput || ""}
                   onChange={(e) =>
@@ -270,7 +270,7 @@ export function PromillemeterForm() {
             <Input
               id="masl"
               type="number"
-              value={userData.masl || ""}
+              value={userData.masl ?? ""}
               onChange={(e) =>
                 handleInputChange(
                   "masl",
