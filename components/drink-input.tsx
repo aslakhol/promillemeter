@@ -59,18 +59,12 @@ export function DrinkInput({ drinks, onChange }: DrinkInputProps) {
         </p>
       )}
 
-      {drinks.map((drink, index) => (
+      {drinks.map((drink) => (
         <div
           key={drink.id}
           className="grid grid-cols-12 gap-4 items-end border p-4 rounded-md"
         >
-          <div className="col-span-12 md:col-span-1">
-            <div className="font-medium text-center bg-muted rounded-full w-8 h-8 flex items-center justify-center mx-auto">
-              {index + 1}
-            </div>
-          </div>
-
-          <div className="col-span-12 md:col-span-4">
+          <div className="col-span-12 md:col-span-5">
             <Label htmlFor={`size-${drink.id}`}>Størrelse (ml)</Label>
             <Input
               id={`size-${drink.id}`}
@@ -87,7 +81,7 @@ export function DrinkInput({ drinks, onChange }: DrinkInputProps) {
             />
           </div>
 
-          <div className="col-span-12 md:col-span-4">
+          <div className="col-span-12 md:col-span-5">
             <Label htmlFor={`alcohol-${drink.id}`}>Alkohol (%)</Label>
             <Input
               id={`alcohol-${drink.id}`}
@@ -106,10 +100,10 @@ export function DrinkInput({ drinks, onChange }: DrinkInputProps) {
             />
           </div>
 
-          <div className="col-span-12 md:col-span-3 flex justify-end">
+          <div className="col-span-12 md:col-span-2 flex justify-end">
             <Button
               type="button"
-              variant="destructive"
+              variant="outline"
               size="icon"
               onClick={() => removeDrink(drink.id)}
               className="h-10 w-10"
