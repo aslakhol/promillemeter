@@ -7,12 +7,12 @@ export interface Drink {
 }
 
 export interface UserData {
-  weight: number; // in kg
+  weight: number | undefined; // in kg
   gender: Gender;
-  masl: number; // meters above sea level
+  masl: number | undefined; // meters above sea level
   bacInput: number | null; // direct BAC input in ‰
   drinks: Drink[];
-  drinkingDuration: number; // in hours
+  drinkingDuration: number | undefined; // in hours
 }
 
 export interface CalculationResult {

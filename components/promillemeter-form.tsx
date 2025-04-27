@@ -21,12 +21,12 @@ import { calculateResults } from "@/lib/calculations";
 import { saveUserData, loadUserData } from "@/lib/storage";
 import { toast } from "@/hooks/use-toast";
 const initialUserData: UserData = {
-  weight: 70,
+  weight: undefined,
   gender: "male",
-  masl: 0,
+  masl: undefined,
   bacInput: null,
   drinks: [],
-  drinkingDuration: 0,
+  drinkingDuration: undefined,
 };
 
 export function PromillemeterForm() {
@@ -56,7 +56,10 @@ export function PromillemeterForm() {
 
   const handleCalculate = () => {
     // Validate input
-    if (activeTab === "calculate" && userData.weight <= 0) {
+    if (
+      activeTab === "calculate" &&
+      (!userData.weight || userData.weight <= 0)
+    ) {
       toast({
         title: "Ugyldig vekt",
         description: "Vennligst skriv inn en gyldig vekt.",
@@ -96,6 +99,8 @@ export function PromillemeterForm() {
   };
 
   const toggleMaslUnit = () => {
+    if (userData.masl === undefined) return;
+
     if (showKm) {
       handleInputChange("masl", userData.masl * 1000);
     } else {
@@ -111,6 +116,30 @@ export function PromillemeterForm() {
       handleInputChange("drinks", []);
     } else {
       handleInputChange("bacInput", null);
+    }
+  };
+
+  const isFormValid = () => {
+    if (activeTab === "calculate") {
+      const allDrinksValid = userData.drinks.every(
+        (drink) => drink.size > 0 && drink.alcoholPercentage > 0
+      );
+
+      return (
+        userData.weight !== undefined &&
+        userData.weight > 0 &&
+        userData.masl !== undefined &&
+        userData.drinkingDuration !== undefined &&
+        userData.drinks.length > 0 &&
+        allDrinksValid
+      );
+    } else {
+      return (
+        userData.bacInput !== null &&
+        userData.bacInput > 0 &&
+        userData.masl !== undefined &&
+        userData.masl >= 0
+      );
     }
   };
 
@@ -259,6 +288,7 @@ export function PromillemeterForm() {
             className="w-full"
             size="lg"
             onClick={handleCalculate}
+            disabled={!isFormValid()}
           >
             Regn ut
           </Button>
