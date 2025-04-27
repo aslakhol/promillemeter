@@ -111,9 +111,7 @@ export function PromillemeterForm() {
       <Card>
         <CardHeader>
           <CardTitle>Promillemeter Kalkulator</CardTitle>
-          <CardDescription>
-            Beregn din Promillemeter-verdi basert på BAC og høyde
-          </CardDescription>
+          <CardDescription>Finn din promillemeter</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Personal Information */}
@@ -206,7 +204,7 @@ export function PromillemeterForm() {
             size="lg"
             onClick={handleCalculate}
           >
-            Beregn Promillemeter
+            Regn ut
           </Button>
         </CardContent>
       </Card>

@@ -51,8 +51,8 @@ export function BacInput({
         className="w-full"
       >
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="direct">Direkte BAC-inndata</TabsTrigger>
-          <TabsTrigger value="calculate">Beregn fra drinker</TabsTrigger>
+          <TabsTrigger value="calculate">Drikke</TabsTrigger>
+          <TabsTrigger value="direct">‰</TabsTrigger>
         </TabsList>
 
         <TabsContent value="direct" className="space-y-4 pt-4">
@@ -67,7 +67,7 @@ export function BacInput({
               onChange={(e) =>
                 onBacChange(Number.parseFloat(e.target.value) || 0)
               }
-              placeholder="Skriv inn BAC i promille (‰)"
+              placeholder="Skriv inn promillen din"
             />
           </div>
         </TabsContent>
