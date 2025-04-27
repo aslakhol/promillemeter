@@ -172,12 +172,29 @@ export function PromillemeterForm() {
     }
   };
 
+  const handleReset = () => {
+    setUserData(initialUserData);
+    setResult(null);
+    setActiveTab("calculate");
+    localStorage.removeItem("userData");
+  };
+
   return (
     <div className="space-y-8">
       <Card>
-        <CardHeader>
-          <CardTitle>Promillemeter Kalkulator</CardTitle>
-          <CardDescription>Finn din promillemeter</CardDescription>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle>Promillemeter Kalkulator</CardTitle>
+            <CardDescription>Finn din promillemeter</CardDescription>
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleReset}
+          >
+            Nullstill
+          </Button>
         </CardHeader>
         <CardContent className="space-y-6">
           <Tabs
