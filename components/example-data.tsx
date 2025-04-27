@@ -22,7 +22,7 @@ const exampleData: ExampleData[] = [
     data: {
       bacInput: null,
       masl: 384400000,
-      weight: 70,
+      weight: 75,
       gender: "male",
       drinks: [
         {
@@ -40,7 +40,7 @@ const exampleData: ExampleData[] = [
     data: {
       bacInput: 14.8,
       masl: 105,
-      weight: 70,
+      weight: 85,
       gender: "male",
       drinks: [],
       drinkingDuration: 0,
