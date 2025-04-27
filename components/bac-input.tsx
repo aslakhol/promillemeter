@@ -57,7 +57,7 @@ export function BacInput({
 
         <TabsContent value="direct" className="space-y-4 pt-4">
           <div className="grid gap-2">
-            <Label htmlFor="bac-direct">Blodalkoholinnhold (‰)</Label>
+            <Label htmlFor="bac-direct">Promille (‰)</Label>
             <Input
               id="bac-direct"
               type="number"
