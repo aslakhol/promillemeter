@@ -237,9 +237,9 @@ export function PromillemeterForm() {
                 <Input
                   id="bac-direct"
                   type="number"
-                  min="0.1"
+                  min="0"
                   step="0.1"
-                  value={userData.bacInput || ""}
+                  value={userData.bacInput ?? ""}
                   onChange={(e) =>
                     handleInputChange(
                       "bacInput",
