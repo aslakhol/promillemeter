@@ -35,6 +35,7 @@ export function PromillemeterForm() {
   const [showKm, setShowKm] = useState(false);
   const [activeTab, setActiveTab] = useState<string>("calculate");
   const resultRef = useRef<HTMLDivElement>(null);
+  const shouldCalculateRef = useRef(false);
 
   // Load saved data on component mount
   useEffect(() => {
@@ -44,6 +45,14 @@ export function PromillemeterForm() {
       // Don't automatically switch tabs based on saved data
     }
   }, []);
+
+  // Effect to handle calculation after state updates
+  useEffect(() => {
+    if (shouldCalculateRef.current) {
+      handleCalculate();
+      shouldCalculateRef.current = false;
+    }
+  }, [userData, activeTab]);
 
   // Scroll to results when they appear
   useEffect(() => {
@@ -96,6 +105,7 @@ export function PromillemeterForm() {
     if (exampleData.bacInput !== undefined) {
       setActiveTab(exampleData.bacInput !== null ? "direct" : "calculate");
     }
+    shouldCalculateRef.current = true;
   };
 
   const toggleMaslUnit = () => {
