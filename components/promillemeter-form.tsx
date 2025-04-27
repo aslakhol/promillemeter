@@ -128,13 +128,6 @@ export function PromillemeterForm() {
   };
 
   const toggleMaslUnit = () => {
-    if (userData.masl === undefined) return;
-
-    if (showKm) {
-      handleInputChange("masl", userData.masl * 1000);
-    } else {
-      handleInputChange("masl", userData.masl / 1000);
-    }
     setShowKm(!showKm);
   };
 
@@ -187,14 +180,24 @@ export function PromillemeterForm() {
             <CardTitle>Promillemeter Kalkulator</CardTitle>
             <CardDescription>Finn din promillemeter</CardDescription>
           </div>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handleReset}
-          >
-            Nullstill
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={toggleMaslUnit}
+            >
+              Bytt til {showKm ? "Meter" : "Kilometer"}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleReset}
+            >
+              Nullstill
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="space-y-6">
           <Tabs
@@ -305,28 +308,26 @@ export function PromillemeterForm() {
 
           {/* MASL Input - Common for both tabs */}
           <div className="grid gap-2">
-            <div className="flex justify-between">
-              <Label htmlFor="masl">
-                {showKm ? "Kilometer over havet" : "Meter over havet"}
-              </Label>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={toggleMaslUnit}
-              >
-                Bytt til {showKm ? "Meter" : "Kilometer"}
-              </Button>
-            </div>
+            <Label htmlFor="masl">
+              {showKm ? "Kilometer over havet" : "Meter over havet"}
+            </Label>
             <Input
               id="masl"
               type="number"
-              value={userData.masl ?? ""}
+              value={
+                userData.masl !== undefined
+                  ? showKm
+                    ? userData.masl / 1000
+                    : userData.masl
+                  : ""
+              }
               onChange={(e) =>
                 handleInputChange(
                   "masl",
                   e.target.value === ""
                     ? undefined
+                    : showKm
+                    ? Number.parseFloat(e.target.value) * 1000
                     : Number.parseFloat(e.target.value)
                 )
               }

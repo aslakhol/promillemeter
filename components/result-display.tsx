@@ -25,15 +25,16 @@ export function ResultDisplay({ result, showKm = false }: ResultDisplayProps) {
     return formatted.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   };
 
-  // Determine the unit based on showKm
-  const unit = showKm ? "‰km" : "‰m";
-
-  // Format the value based on showKm
-  const value = showKm ? result.promillemeter / 1000 : result.promillemeter;
-  const formattedValue = formatNumber(value);
+  // Convert value to kilometers if needed for display
+  const displayValue = showKm
+    ? result.promillemeter / 1000
+    : result.promillemeter;
+  const formattedValue = formatNumber(displayValue);
 
   const copyToClipboard = async () => {
-    const shareText = `Min Promillemeter er ${formattedValue} ${unit}
+    const shareText = `Min Promillemeter er ${formattedValue} ${
+      showKm ? "‰km" : "‰m"
+    }
     
     Sjekk din promillemeter på https://promillemeter.aslak.io`;
 
@@ -45,7 +46,9 @@ export function ResultDisplay({ result, showKm = false }: ResultDisplayProps) {
   };
 
   const shareResults = async () => {
-    const shareText = `Min Promillemeter er ${formattedValue} ${unit}
+    const shareText = `Min Promillemeter er ${formattedValue} ${
+      showKm ? "‰km" : "‰m"
+    }
     
     Sjekk din på https://promillemeter.aslak.io`;
 
@@ -88,7 +91,7 @@ export function ResultDisplay({ result, showKm = false }: ResultDisplayProps) {
             <span className="text-5xl font-bold tabular-nums">
               {formattedValue}
             </span>
-            <span className="text-xl ml-2">{unit}</span>
+            <span className="text-xl ml-2">{showKm ? "‰km" : "‰m"}</span>
           </div>
         </div>
       </CardContent>
