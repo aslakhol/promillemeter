@@ -18,7 +18,7 @@ import { ResultDisplay } from "./result-display";
 import { ExampleDataButtons } from "./example-data";
 import type { UserData, Gender, CalculationResult } from "@/lib/types";
 import { calculateResults } from "@/lib/calculations";
-import { saveUserData, loadUserData } from "@/lib/storage";
+import { saveUserData, loadUserData, clearUserData } from "@/lib/storage";
 import { toast } from "@/hooks/use-toast";
 const initialUserData: UserData = {
   weight: undefined,
@@ -169,7 +169,7 @@ export function PromillemeterForm() {
     setUserData(initialUserData);
     setResult(null);
     setActiveTab("calculate");
-    localStorage.removeItem("userData");
+    clearUserData();
   };
 
   return (

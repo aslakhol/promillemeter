@@ -17,3 +17,9 @@ export function loadUserData(): UserData | null {
   }
   return null;
 }
+
+export function clearUserData(): void {
+  if (typeof window !== "undefined") {
+    localStorage.removeItem(STORAGE_KEY);
+  }
+}
