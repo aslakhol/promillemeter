@@ -36,7 +36,7 @@ export function ResultDisplay({ result, showKm = false }: ResultDisplayProps) {
       showKm ? "‰km" : "‰m"
     }
     
-    Sjekk din promillemeter på https://promillemeter.aslak.io`;
+Sjekk din promillemeter på https://promillemeter.aslak.io`;
 
     await navigator.clipboard.writeText(shareText);
     toast({
@@ -50,7 +50,7 @@ export function ResultDisplay({ result, showKm = false }: ResultDisplayProps) {
       showKm ? "‰km" : "‰m"
     }
     
-    Sjekk din på https://promillemeter.aslak.io`;
+Sjekk din promillemeter på https://promillemeter.aslak.io`;
 
     try {
       await navigator.share({
