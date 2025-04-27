@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -46,24 +46,7 @@ export function PromillemeterForm() {
     }
   }, []);
 
-  // Effect to handle calculation after state updates
-  useEffect(() => {
-    if (shouldCalculateRef.current) {
-      handleCalculate();
-      shouldCalculateRef.current = false;
-    }
-  }, [userData, activeTab]);
-
-  // Scroll to results when they appear
-  useEffect(() => {
-    if (result && resultRef.current) {
-      setTimeout(() => {
-        resultRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, 100);
-    }
-  }, [result]);
-
-  const handleCalculate = () => {
+  const handleCalculate = useCallback(() => {
     // Validate input
     if (
       activeTab === "calculate" &&
@@ -90,7 +73,24 @@ export function PromillemeterForm() {
     const calculationResult = calculateResults(userData);
     setResult(calculationResult);
     saveUserData(userData);
-  };
+  }, [activeTab, userData]);
+
+  // Effect to handle calculation after state updates
+  useEffect(() => {
+    if (shouldCalculateRef.current) {
+      handleCalculate();
+      shouldCalculateRef.current = false;
+    }
+  }, [userData, activeTab, handleCalculate]);
+
+  // Scroll to results when they appear
+  useEffect(() => {
+    if (result && resultRef.current) {
+      setTimeout(() => {
+        resultRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    }
+  }, [result]);
 
   const handleInputChange = <K extends keyof UserData>(
     field: K,
