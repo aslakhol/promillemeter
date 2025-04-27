@@ -1,13 +1,7 @@
 "use client";
-import { Share2 } from "lucide-react";
+import { Share2, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { CalculationResult } from "@/lib/types";
 import { toast } from "@/components/ui/use-toast";
 
@@ -38,32 +32,32 @@ export function ResultDisplay({ result, showKm = false }: ResultDisplayProps) {
   const value = showKm ? result.promillemeter / 1000 : result.promillemeter;
   const formattedValue = formatNumber(value);
 
-  const shareResults = async () => {
-    const shareText = `Min Promillemeter-resultat: ${formattedValue} ${unit}`;
+  const copyToClipboard = async () => {
+    const shareText = `Min Promillemeter er ${formattedValue} ${unit}
+    
+    Sjekk din promillemeter på https://promillemeter.aslak.io`;
 
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "Promillemeter Resultat",
-          text: shareText,
-          url: window.location.href,
-        });
-      } catch (error) {
-        console.error("Error sharing:", error);
-        fallbackShare(shareText);
-      }
-    } else {
-      fallbackShare(shareText);
-    }
+    await navigator.clipboard.writeText(shareText);
+    toast({
+      title: "Kopiert til utklippstavlen",
+      description: "Ditt resultat har blitt kopiert til utklippstavlen.",
+    });
   };
 
-  const fallbackShare = (text: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      toast({
-        title: "Kopiert til utklippstavlen",
-        description: "Ditt resultat har blitt kopiert til utklippstavlen.",
+  const shareResults = async () => {
+    const shareText = `Min Promillemeter er ${formattedValue} ${unit}
+    
+    Sjekk din på https://promillemeter.aslak.io`;
+
+    try {
+      await navigator.share({
+        title: "Promillemeter Resultat",
+        text: shareText,
+        url: window.location.href,
       });
-    });
+    } catch (error) {
+      console.error("Error sharing:", error);
+    }
   };
 
   return (
@@ -71,10 +65,18 @@ export function ResultDisplay({ result, showKm = false }: ResultDisplayProps) {
       <CardHeader>
         <CardTitle className="flex justify-between items-center">
           <span>Din promillemeter</span>
-          <Button variant="outline" size="icon" onClick={shareResults}>
-            <Share2 className="h-4 w-4" />
-            <span className="sr-only">Del resultat</span>
-          </Button>
+          <div className="flex gap-2">
+            {typeof navigator !== "undefined" && navigator.share && (
+              <Button variant="outline" size="icon" onClick={shareResults}>
+                <Share2 className="h-4 w-4" />
+                <span className="sr-only">Del resultat</span>
+              </Button>
+            )}
+            <Button variant="outline" size="icon" onClick={copyToClipboard}>
+              <Copy className="h-4 w-4" />
+              <span className="sr-only">Kopier til utklippstavlen</span>
+            </Button>
+          </div>
         </CardTitle>
       </CardHeader>
       <CardContent>
