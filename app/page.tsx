@@ -1,5 +1,5 @@
-import { Toaster } from "@/components/ui/toaster"
-import { PromillemeterForm } from "@/components/promillemeter-form"
+import { Toaster } from "@/components/ui/toaster";
+import { PromillemeterForm } from "@/components/promillemeter-form";
 
 export default function Home() {
   return (
@@ -8,7 +8,7 @@ export default function Home() {
         <header className="mb-8 text-center">
           <h1 className="text-4xl font-bold tracking-tight">Promillemeter</h1>
           <p className="text-lg text-muted-foreground mt-2">
-            Calculate your Promillemeter value: BAC (‰) × Meters Above Sea Level
+            Beregn din Promillemeter-verdi: BAC (‰) × Meter over havet
           </p>
         </header>
 
@@ -16,5 +16,5 @@ export default function Home() {
       </div>
       <Toaster />
     </main>
-  )
+  );
 }
